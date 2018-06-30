@@ -1,0 +1,175 @@
+---
+title: "Diamond Pricing Model - Linear Regression"
+author: "Benedict Aquino and John Collins"
+output: html_document
+---
+```{r, include = FALSE}
+library(tidyverse)
+library(mosaic)
+library(multcomp)
+library(car)
+```
+### Load dataset and check for homoscedasticity
+
+```{r}
+diamonds<-read.csv("data/diamondData.csv")
+xyplot(price~carat, data=diamonds, main = "Figure 1")    
+```
+
+The scatterplot looks heteroscedastic, we use a log transformation to adjust for this.
+
+```{r}
+diamonds<-mutate(diamonds,lnprice=log(price)) 
+xyplot(lnprice~carat, data=diamonds, main = "Figure 2")
+```
+
+The other covariates are categorical, so we check variances with boxplots
+
+```{r}
+bwplot(lnprice~color, data=diamonds, main = "Figure 3")         
+bwplot(lnprice~clarity, data=diamonds, main = "Figure 4")       
+bwplot(lnprice~certification, data=diamonds, main = "Figure 5")
+```
+
+The variances appear equal for color and clarity, but not certification.
+Levene's test is used to confirm inferences from boxplots
+```{r}
+leveneTest(lnprice~color, data=diamonds)    
+leveneTest(lnprice~clarity, data=diamonds)  
+leveneTest(lnprice~certification, data=diamonds)
+```
+
+### Univariate Analyses
+
+```{r}
+summary(lm(lnprice~carat, diamonds))
+```
+
+The first-order linear regression is significant, but the scatterplot looks like there may be a quadratic association between lnprice and carat, so we check if the second-order linear regression is significant and compare the adjusted R-squared values.
+
+```{r}
+diamonds<-mutate(diamonds,carat2=carat^2)
+summary(lm(lnprice~carat+carat2, data=diamonds))
+```
+
+The adjusted R-squared value for the second-order model is greater than the first-order, so we will proceed with the quadratic model.
+
+
+```{r}
+summary(lm(lnprice~color, data=diamonds))
+```
+
+The linear regression between lnprice on color is insignificant, and since it is a ranking of color purity, we can split the six categories into two with no real repercussions for the multivariate analysis
+
+```{r}
+diamonds$recolor[diamonds$color == "D"] <- "DEF"
+diamonds$recolor[diamonds$color == "E"] <- "DEF"
+diamonds$recolor[diamonds$color == "F"] <- "DEF"
+diamonds$recolor[diamonds$color == "G"] <- "GHI"
+diamonds$recolor[diamonds$color == "H"] <- "GHI"
+diamonds$recolor[diamonds$color == "I"] <- "GHI"
+```
+
+```{r}
+bwplot(lnprice~recolor, data=diamonds)
+leveneTest(lnprice~as.factor(recolor), data=diamonds)
+summary(lm(lnprice~recolor, data=diamonds))
+```
+
+```{r}
+summary(lm(lnprice~clarity, data=diamonds))
+```
+
+The regression of lnprice on clarity is significant, so there is an association. Then we check the contrasts to see if we can group any categories together. Intuitively, we should check if there is a difference in mean price values between VVS1 and VVS2, and between VS1 and VS2. 
+
+```{r}
+model<-lm(lnprice~clarity, data=diamonds)
+contrast<-matrix(c(0,1,-1,0,0),1)
+summary(glht(model,contrast))
+
+model<-lm(lnprice~clarity, data=diamonds)
+contrast<-matrix(c(0,0,0,1,-1),1)
+summary(glht(model,contrast))
+```
+
+The tests are not statistically significant, so we can group together VVS1 with VVS2 and VS1 with VS2. Then we test to see if there is a difference between the new groups and the reference group.
+
+```{r}
+diamonds$reclarity[diamonds$clarity == "IF"]<- "IF"
+diamonds$reclarity[diamonds$clarity == "VVS1"]<- "VVS"
+diamonds$reclarity[diamonds$clarity == "VVS2"]<-"VVS"
+diamonds$reclarity[diamonds$clarity == "VS1"]<-"VS"
+diamonds$reclarity[diamonds$clarity == "VS2"]<-"VS"
+
+model<-lm(lnprice~reclarity, data=diamonds)
+contrast<-matrix(c(1,-1,0),1)
+summary(glht(model,contrast))
+
+model<-lm(lnprice~reclarity, data=diamonds)
+contrast<-matrix(c(1,0,-1),1)
+summary(glht(model,contrast))
+```
+
+It is statistically significant that there is a difference in mean price between the new VVS and VS groups and the reference group.
+
+```{r}
+bwplot(lnprice~reclarity, data=diamonds)
+leveneTest(lnprice~as.factor(reclarity), data=diamonds)
+summary(lm(lnprice~reclarity, data=diamonds))
+```
+
+The adjusted R-squared value for the new reclarity is greater than for clarity.
+
+```{r}
+summary(lm(lnprice~certification, data=diamonds))
+```
+
+The linear regression of lnprice on certification is significant.
+
+### Multivariate Analyses
+
+```{r}
+model0<-lm(lnprice~carat+carat2+recolor+reclarity+certification, data=diamonds)
+summary(model0)
+reduced<-lm(lnprice~carat+carat2+recolor+reclarity, data=diamonds)
+anova(reduced,model0)
+```
+
+The anova test shows that certification is not significant when adjusted for the other covariates, so we can drop it from the model.
+
+
+```{r}
+full<-lm(lnprice~carat+carat2+recolor+reclarity, data=diamonds)
+reduced<-lm(lnprice~carat+carat2+reclarity, data=diamonds)
+anova(reduced,full)
+```
+
+Although recolor did not show an association with lnprice, when adjusted for the other covariates, there was a statistically significant association.
+
+#### Check for Interactions
+
+```{r}
+model1<-lm(lnprice~carat+carat2+recolor+reclarity+recolor*carat+reclarity*carat, diamonds)
+summary(model1)
+```
+
+The summary indicates that the interaction covariates may not be significant, so we test to see if there is any association between the price and interaction covariates after adjusting for the non-interaction covariates.
+
+```{r}
+full<-model1
+reduced<-lm(lnprice~carat+carat2+recolor+reclarity, data=diamonds)
+anova(reduced,full)
+```
+
+The test shows that it is not statistically significant that there is an association. So we drop the interaction terms.
+
+So our final model is $Y_{i} = \beta_{0} + \beta_{1}carat + \beta_{2}carat^2 + \beta_{3}D_{GHI} + \beta_{4}D_{VVS} + \beta_{5}D_{VS}$
+
+```{r}
+model2<-lm(lnprice~carat+carat2+recolor+reclarity, diamonds)
+summary(model2)
+
+ggplot(diamonds, aes(x = carat, y = lnprice, color = reclarity)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1)
+
+ggplot(diamonds, aes(x = carat, y = lnprice, color = recolor)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1)
+```
