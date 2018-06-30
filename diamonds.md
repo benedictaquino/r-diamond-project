@@ -514,7 +514,7 @@ The test shows that it is not statistically significant that there is an
 association. So we drop the interaction terms.
 
 So our final model is
-*Y*<sub>*i*</sub> = *β*<sub>0</sub> + *β*<sub>1</sub>*carat* + *β*<sub>2</sub>*carat*<sup>2</sup> + *β*<sub>3</sub>*D*<sub>*GHI*</sub> + *β*<sub>4</sub>*D*<sub>*VVS*</sub> + *β*<sub>5</sub>*D*<sub>*VS*</sub>
+<center><big><i>Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>carat + β<sub>2</sub>carat<sup>2</sup> + β<sub>3</sub>D<sub>GHI</sub> + β<sub>4</sub>D<sub>VVS</sub> + β<sub>5</sub>D<sub>VS</sub></i></big></center>
 
 ``` r
 model2<-lm(lnprice~carat+carat2+recolor+reclarity, diamonds)
