@@ -1,7 +1,9 @@
 ---
 title: "Diamond Pricing Model - Linear Regression"
 author: "Benedict Aquino and John Collins"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 ```{r, include = FALSE}
 library(tidyverse)
