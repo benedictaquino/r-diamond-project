@@ -12,6 +12,7 @@ Diamond pricing model created using multivariate linear regression techniques on
 
 
 ## Technical Report
+###### R code, outputs and plots can be found in the diamonds.md markdown file.
 
 ### Summary
 
