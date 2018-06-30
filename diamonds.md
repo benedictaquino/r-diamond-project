@@ -514,7 +514,7 @@ The test shows that it is not statistically significant that there is an
 association. So we drop the interaction terms.
 
 So our final model is
-<center><big><i>Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>carat + β<sub>2</sub>carat<sup>2</sup> + β<sub>3</sub>D<sub>GHI</sub> + β<sub>4</sub>D<sub>VVS</sub> + β<sub>5</sub>D<sub>VS</sub></i></big></center>
+*Y*<sub>*i*</sub> = *β*<sub>0</sub> + *β*<sub>1</sub>*c**a**r**a**t* + *β*<sub>2</sub>*c**a**r**a**t*<sup>2</sup> + *β*<sub>3</sub>*D*<sub>*G**H**I*</sub> + *β*<sub>4</sub>*D*<sub>*V**V**S*</sub> + *β*<sub>5</sub>*D*<sub>*V**S*</sub>
 
 ``` r
 model2<-lm(lnprice~carat+carat2+recolor+reclarity, diamonds)
@@ -546,13 +546,13 @@ summary(model2)
     ## F-statistic:  4329 on 5 and 302 DF,  p-value: < 2.2e-16
 
 ``` r
-ggplot(diamonds, aes(x = carat, y = lnprice, color = reclarity)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1)
+ggplot(diamonds, aes(x = carat, y = lnprice, color = reclarity)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1) + ggtitle('Diamond Price  v. Carat by Clarity')
 ```
 
-![](diamonds_files/figure-markdown_github/unnamed-chunk-20-1.png)
+![](diamonds_files/figure-markdown_github/Plots-1.png)
 
 ``` r
-ggplot(diamonds, aes(x = carat, y = lnprice, color = recolor)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1)
+ggplot(diamonds, aes(x = carat, y = lnprice, color = recolor)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1) + ggtitle('Diamond Price  v. Carat by Color')
 ```
 
-![](diamonds_files/figure-markdown_github/unnamed-chunk-20-2.png)
+![](diamonds_files/figure-markdown_github/Plots-2.png)

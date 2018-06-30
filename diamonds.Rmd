@@ -167,11 +167,13 @@ The test shows that it is not statistically significant that there is an associa
 
 So our final model is $Y_{i} = \beta_{0} + \beta_{1}carat + \beta_{2}carat^2 + \beta_{3}D_{GHI} + \beta_{4}D_{VVS} + \beta_{5}D_{VS}$
 
-```{r}
+```{r Final Model}
 model2<-lm(lnprice~carat+carat2+recolor+reclarity, diamonds)
 summary(model2)
+```
 
-ggplot(diamonds, aes(x = carat, y = lnprice, color = reclarity)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1)
+```{r Plots}
+ggplot(diamonds, aes(x = carat, y = lnprice, color = reclarity)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1) + ggtitle('Diamond Price  v. Carat by Clarity')
 
-ggplot(diamonds, aes(x = carat, y = lnprice, color = recolor)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1)
+ggplot(diamonds, aes(x = carat, y = lnprice, color = recolor)) + geom_point()  + stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1) + ggtitle('Diamond Price  v. Carat by Color')
 ```
