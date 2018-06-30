@@ -100,7 +100,7 @@ The summary indicates that the interaction covariates may not be significant, so
 
 ### Conclusion
 
-In order to correct for heteroscedasticity we modeled the natural logarithm of price, *lnprice* against the covariates rather than *price*. Our *certification* variable was insignificant so we left it out of the final model. The six *color* groups were consolidated into two groups and the six *clarity* groups were consolidated into three groups for the final model. Since *carat* showed statistical significance of a quadratic relationship we have also included a *carat<sup>2</sup>* covariate.
+In order to correct for heteroscedasticity we modeled the natural logarithm of price, *lnprice*, against the covariates rather than *price*. Our *certification* variable was insignificant so we left it out of the final model. The six *color* groups were consolidated into two groups and the six *clarity* groups were consolidated into three groups for the final model. Since *carat* showed statistical significance of a quadratic relationship we have also included a *carat<sup>2</sup>* covariate.
 So our final model is: 
 
 <center><i><big>Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>carat + β<sub>2</sub>carat<sup>2</sup> + β<sub>3</sub>D<sub>GHI</sub> + β<sub>4</sub>D<sub>VVS</sub> + β<sub>5</sub>D<sub>VS</sub></big><i></center>
