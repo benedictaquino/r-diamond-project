@@ -1,4 +1,5 @@
 # r-diamond-project
+###### MATH299 - Linear Models - Spring 2016
 
 Diamond pricing model created using multivariate linear regression techniques on a data set containing information on ***n*** = **308** round diamonds, including their **price**, **carat**, **clarity**, **color**, and **cut** (the "4 C's).
 
@@ -128,6 +129,7 @@ So our final model, as detailed in Table 7, is:
 |Parameter|Covariate|Parameter Estimate|Standard Error|t-value|p-value|Adjusted R<sup>2</sup>|
 |:-:|:-|:-:|:-:|:-:|:-:|:-:|
 |<i>β<sub>0</sub><br>β<sub>1</sub><br>β<sub>2</sub><br>β<sub>3</sub><br>β<sub>4</sub><br>β<sub>5</sub></i>|<b>Intercept<br>carat<br>carat<sup>2</sup><br>recolorGHI<br>reclarityVS<br>reclarityVVS<b>|5.93309<br>5.72345<br>-2.17234<br>-0.21739<br>-0.24600<br>-0.12125|0.03076<br>0.11363<br>0.08622<br>0.01127<br>0.01902<br>0.01885|192.862<br>50.370<br>-25.195<br>-19.284<br>-12.934<br>-6.433|< 0.001<br>< 0.001<br>< 0.001<br>< 0.001<br>< 0.001<br>< 0.001|0.986|
+
 
 </center>
 
