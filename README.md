@@ -1,4 +1,4 @@
-# r-diamond-project
+## Diamond Pricing Model 
 ###### MATH299 - Linear Models - Spring 2016
 
 Diamond pricing model created using multivariate linear regression techniques on a data set containing information on ***n*** = **308** round diamonds, including their **price**, **carat**, **clarity**, **color**, and **cut** (the "4 C's).
